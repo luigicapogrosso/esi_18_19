@@ -1,10 +1,10 @@
 %%
 
-% Martedì 19 Marzo 2019.
+% Martedï¿½ 19 Marzo 2019.
 % Corso di Elaborazione Segnali ed Immagini.
 % Percorso 1: progetto ESI.
 % Sviluppo di un algoritmo di riconscimento delle canzoni.
-% Partecipanti: Nicolò Lutteri;
+% Partecipanti: Nicolï¿½ Lutteri;
 %               Damian Mastroiacovo;
 %               Luigi Capogrosso.
 
@@ -13,7 +13,7 @@
 % Pulisco la memoria di lavoro (Workspace).
 clear all;
 % Elimino tutte le figure presenti (Figures).
-close all; 
+close all;
 % Ripulisco la finestra di comando (Command Window).
 clc;
 
@@ -23,20 +23,19 @@ diary('log.txt');
 % Variabile per l'esecuzione dell'elaborato in versione rapida.
 lightVersion = true;
 
-% @brief Verifico se la GPU è predisposta all'utilizzo di CUDA.
+% @brief Verifico se la GPU ï¿½ predisposta all'utilizzo di CUDA.
 % @returns 1 (vero) o 0 (falso)
-% accellerationGPU = parallel.gpu.GPUDevice.isAvailable;
-accellerationGPU = false;
+accellerationGPU = parallel.gpu.GPUDevice.isAvailable;
 
 if accellerationGPU
-    % Un oggetto gpuDevice rappresenta una GPU nel computer. 
-    % È possibile utilizzare la GPU per eseguire codice MATLAB.
+    % Un oggetto gpuDevice rappresenta una GPU nel computer.
+    % ï¿½ possibile utilizzare la GPU per eseguire codice MATLAB.
     gdev = gpuDevice;
     mem = gdev.AvailableMemory;
 end
 
 if accellerationGPU
-   fprintf("Accellerazione GPU: Abilitata\n"); 
+   fprintf("Accellerazione GPU: Abilitata\n");
 else
    fprintf("Accellerazione GPU: Disabilitata\n");
 end
@@ -99,11 +98,11 @@ for i = 1 : cycle
     comparisons = cell(length(library), 1);
     for j = 1 : length(library)
         fprintf("Xcorr tra caso %i e brano libreria %i\n", i, j);
-        
+
         if accellerationGPU
             % @function gpuArray
             % @brief Copia l'array dalla memoria di sistema (RAM) in quella
-            % della GPU. Attraverso tale funzione MATLAB sa quindi che il 
+            % della GPU. Attraverso tale funzione MATLAB sa quindi che il
             % lavoro deve essere svolto dalla GPU e non dalla CPU.
             comparisons{j} = xcorr(gpuArray(useCases{i, 1}),      ...
                                    gpuArray(library{j, 1}(:, 1)));
@@ -111,13 +110,13 @@ for i = 1 : cycle
             % @function xcorr.
             % @brief Effettua la cross-correlazione fra due segnali.
             % @param useCases{i, 1} Segnale 1.
-            % @param library{j, 1}(:, 1) Segnale 2, utilizzando solo il 
+            % @param library{j, 1}(:, 1) Segnale 2, utilizzando solo il
             %                            il canale sinistro.
             % @return Il grado di somiglianza fra i due segnali.
-            comparisons{j} = xcorr(useCases{i, 1}, library{j, 1}(:, 1)); 
+            comparisons{j} = xcorr(useCases{i, 1}, library{j, 1}(:, 1));
         end
     end
-    
+
     if accellerationGPU
         % La CPU attende la terminazione del lavoro da parte della GPU.
         wait(gdev);
@@ -128,9 +127,9 @@ for i = 1 : cycle
             comparisons{j} = gather(comparisons{j});
         end
     else
-        
+
     end
-    
+
     % Analizzo i risultati della cross correlazione.
     valuexcorr = AnalizzaCaso(comparisons);
     if (useCases{i, 3} == valuexcorr)
@@ -158,7 +157,7 @@ for z = 1 : size(result, 1)
     total = right + wrong;
     % Calcolo del rapporto casi corretti su casi totali.
     percentage = right / total * 100;
-    fprintf("Lunghezza: %i\nGiusti: %i\nSbagliati: %i\nRapporto: %i%%\n", ...   
+    fprintf("Lunghezza: %i\nGiusti: %i\nSbagliati: %i\nRapporto: %i%%\n", ...
                                                           z    ,       ...
                                                           right,       ...
                                                           wrong,       ...
